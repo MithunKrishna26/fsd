@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrition Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100;200;300;400;500;600;700;800;900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Newsreader:ital,opsz,wght@0,6..72,200;0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;0,6..72,800;1,6..72,200;1,6..72,300;1,6..72,400;1,6..72,500;1,6..72,600;1,6..72,700;1,6..72,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#hero">
+                <img src="/placeholder.svg?height=60&width=60" alt="Logo" id="nav-logo">
+                <img src="/placeholder.svg?height=40&width=120" alt="Brand" class="logo-text">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about-yourself">About You</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#meal-plan">Meal Plan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="search-history.html">History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="logout()">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="hero-bg-overlay">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div id="hero-card" class="p-5">
+                            <h1 class="welcome-title">Welcome to Your <span>Nutrition</span> Journey</h1>
+                            <p>Discover personalized meal plans and track your nutritional goals with our comprehensive nutrition analysis tool.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who We Are Section -->
+    <section id="who-we-are">
+        <div class="row">
+            <div class="col-lg-6 d-flex align-items-center">
+                <div class="container">
+                    <h2 class="section-title">Who We Are</h2>
+                    <p class="section-text-content">
+                        We are dedicated to helping you achieve your nutritional goals through personalized meal planning and comprehensive nutritional analysis.
+                    </p>
+                    <div class="text-center">
+                        <button class="btn btn-success who-we-are-btn">Learn More</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 p-0">
+                <div id="whowheare-bg-image">
+                    <div class="bg-overlay d-flex align-items-center justify-content-center">
+                        <div class="text-center">
+                            <h3 class="section-title">Your Health Matters</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Yourself Form -->
+    <section id="about-yourself">
+        <div class="container">
+            <h2 id="about-you-title">Tell Us About Yourself</h2>
+            <div id="about-form">
+                <form id="aboutForm" class="form">
+                    <div class="form-inner">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="input-field">
+                                    <label for="age" class="form-label">Age</label>
+                                    <input type="number" class="form-control" id="age" name="age" min="1" max="120">
+                                </div>
+                                <div class="input-field">
+                                    <label for="weight" class="form-label">Weight (kg)</label>
+                                    <input type="number" class="form-control" id="weight" name="weight" step="0.1" min="1">
+                                </div>
+                                <div class="input-field">
+                                    <label for="height" class="form-label">Height (cm)</label>
+                                    <input type="number" class="form-control" id="height" name="height" min="1">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-field">
+                                    <label id="activity-label" class="form-label">Activity Level</label>
+                                    <div class="range-subheadings">
+                                        <span>Sedentary</span>
+                                        <span style="float: right;">Very Active</span>
+                                    </div>
+                                    <input type="range" class="form-range" id="activityLevel" name="activityLevel" min="1" max="5" value="3">
+                                </div>
+                                <div class="input-field">
+                                    <label id="diet-label" class="form-label">Diet Type</label>
+                                    <div id="diet-radio">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="dietType" id="omnivore" value="omnivore" checked>
+                                            <label class="form-check-label" for="omnivore">Omnivore</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="dietType" id="vegetarian" value="vegetarian">
+                                            <label class="form-check-label" for="vegetarian">Vegetarian</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="dietType" id="vegan" value="vegan">
+                                            <label class="form-check-label" for="vegan">Vegan</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success form-button" id="about-submit">Save Profile</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Meal Plan Section -->
+    <section id="meal-plan">
+        <div class="container">
+            <h2 id="meal-section-title">Plan Your <span id="dyn-name">Meals</span></h2>
+            <div class="form-container">
+                <div class="row justify-content-center">
+                    <div class="meal-form-container">
+                        <form id="mealForm" class="form">
+                            <div class="input-field">
+                                <label for="mealName" class="form-label">Meal Name</label>
+                                <input type="text" class="form-control" id="mealName" name="mealName" placeholder="e.g., Breakfast, Lunch, Dinner">
+                            </div>
+                            <div class="input-field">
+                                <label for="ingredient" class="form-label">Add Ingredient</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="ingredient" placeholder="Enter ingredient">
+                                    <input type="number" class="form-control" id="quantity" placeholder="Quantity (g)" min="1">
+                                    <button type="button" class="btn add-button" onclick="addIngredient()">Add</button>
+                                </div>
+                            </div>
+                            <div class="list-container">
+                                <h5>Ingredients:</h5>
+                                <div id="meal-list"></div>
+                            </div>
+                            <div class="meal-button-container">
+                                <button type="submit" class="btn btn-success" id="meal-submit">Analyze Meal</button>
+                                <button type="button" class="btn btn-danger" id="reset-meal-form" onclick="resetMealForm()">Reset</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Results Section -->
+            <div id="results-section" class="mt-5" style="display: none;">
+                <div id="pie-container">
+                    <div id="nutritionChart" class="chart"></div>
+                </div>
+                <div id="final-text">
+                    <div class="text-container">
+                        <h4>Nutritional Analysis</h4>
+                        <div id="totalTextContainer"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq-section">
+        <div class="container">
+            <h2 id="frequently-asked">Frequently Asked Questions</h2>
+            <div class="accordion" id="faq-accordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                            How accurate are the nutritional calculations?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faq-accordion">
+                        <div class="accordion-body">
+                            Our nutritional calculations are based on comprehensive food databases and are accurate for general dietary planning. However, actual nutritional content may vary based on preparation methods and specific food varieties.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                            Can I save my meal plans?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faq-accordion">
+                        <div class="accordion-body">
+                            Yes! All your meal plans are automatically saved to your account and can be accessed from your profile page.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer" class="py-4">
+        <div class="container">
+            <div class="footer-container">
+                <img src="/placeholder.svg?height=100&width=100" alt="Logo" id="logo-footer">
+                <img src="/placeholder.svg?height=75&width=150" alt="Brand" id="brand-footer">
+            </div>
+            <div class="text-center">
+                <p>&copy; 2024 Nutrition App. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

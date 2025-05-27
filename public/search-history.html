@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search History - Nutrition App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100;200;300;400;500;600;700;800;900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Newsreader:ital,opsz,wght@0,6..72,200;0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;0,6..72,800;1,6..72,200;1,6..72,300;1,6..72,400;1,6..72,500;1,6..72,600;1,6..72,700;1,6..72,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .history-container {
+            min-height: 100vh;
+            background-color: var(--light-accent);
+            padding: 50px 0;
+        }
+        
+        .history-card {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0px 0px 17px 0px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--mid-accent);
+        }
+        
+        .history-title {
+            color: var(--main-color);
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 30px;
+            font-family: 'Newsreader', serif;
+        }
+        
+        .nav-link-custom {
+            color: var(--main-color);
+            text-decoration: none;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        
+        .nav-link-custom:hover {
+            color: var(--dark-accent);
+        }
+        
+        .search-item {
+            background-color: rgba(168, 192, 163, 0.1);
+            border: 1px solid var(--mid-accent);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .search-item:hover {
+            background-color: rgba(168, 192, 163, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .search-query {
+            color: var(--main-color);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        
+        .search-date {
+            color: var(--dark-accent);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        .search-results {
+            color: var(--main-color);
+            font-size: 0.95rem;
+        }
+        
+        .no-history {
+            text-align: center;
+            color: var(--main-color);
+            font-size: 1.2rem;
+            padding: 40px;
+        }
+        
+        .clear-history-btn {
+            background-color: var(--red-light);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-family: 'Be Vietnam Pro', sans-serif;
+        }
+        
+        .clear-history-btn:hover {
+            background-color: #7a0303;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="dashboard.html">
+                <img src="/placeholder.svg?height=60&width=60" alt="Logo" id="nav-logo">
+                <img src="/placeholder.svg?height=40&width=120" alt="Brand" class="logo-text">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="logout()">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="history-container">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <a href="dashboard.html" class="nav-link-custom">← Back to Dashboard</a>
+                    <div class="history-card">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h1 class="history-title mb-0">Search History</h1>
+                            <button class="clear-history-btn" onclick="clearHistory()" id="clearBtn" style="display: none;">
+                                Clear All History
+                            </button>
+                        </div>
+                        <div id="historyContainer">
+                            <div class="text-center">
+                                <div class="spinner-border text-success" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Load search history
+        async function loadSearchHistory() {
+            try {
+                const response = await fetch('/api/search-history');
+                if (response.ok) {
+                    const history = await response.json();
+                    displayHistory(history);
+                } else if (response.status === 401) {
+                    window.location.href = '/login.html';
+                } else {
+                    throw new Error('Failed to load history');
+                }
+            } catch (error) {
+                console.error('Error loading search history:', error);
+                document.getElementById('historyContainer').innerHTML = `
+                    <div class="no-history">
+                        <p>Failed to load search history. Please try again later.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Display search history
+        function displayHistory(history) {
+            const container = document.getElementById('historyContainer');
+            const clearBtn = document.getElementById('clearBtn');
+            
+            if (history.length === 0) {
+                container.innerHTML = `
+                    <div class="no-history">
+                        <p>No search history found. Start analyzing meals to see your history here!</p>
+                    </div>
+                `;
+                clearBtn.style.display = 'none';
+            } else {
+                clearBtn.style.display = 'block';
+                container.innerHTML = history.map(item => `
+                    <div class="search-item">
+                        <div class="search-query">${escapeHtml(item.search_query)}</div>
+                        <div class="search-date">${new Date(item.search_date).toLocaleString()}</div>
+                        <div class="search-results">
+                            ${item.search_results ? formatSearchResults(item.search_results) : 'No results available'}
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Format search results for display
+        function formatSearchResults(results) {
+            if (typeof results === 'string') {
+                try {
+                    results = JSON.parse(results);
+                } catch (e) {
+                    return escapeHtml(results);
+                }
+            }
+            
+            if (results && typeof results === 'object') {
+                if (results.ingredients && Array.isArray(results.ingredients)) {
+                    return `Ingredients: ${results.ingredients.map(ing => `${ing.name} (${ing.quantity}g)`).join(', ')}`;
+                } else if (results.mealName) {
+                    return `Meal: ${escapeHtml(results.mealName)}`;
+                } else {
+                    return 'Nutritional analysis completed';
+                }
+            }
+            
+            return 'Analysis completed';
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Clear all search history
+        async function clearHistory() {
+            if (confirm('Are you sure you want to clear all search history? This action cannot be undone.')) {
+                try {
+                    const response = await fetch('/api/search-history', {
+                        method: 'DELETE'
+                    });
+                    
+                    if (response.ok) {
+                        loadSearchHistory(); // Reload the page
+                    } else {
+                        alert('Faile
+                    } else {
+                        alert('Failed to clear search history. Please try again.');
+                    }
+                } catch (error) {
+                    console.error('Error clearing search history:', error);
+                    alert('Failed to clear search history. Please try again.');
+                }
+            }
+        }
+
+        // Logout function
+        async function logout() {
+            try {
+                await fetch('/api/logout', { method: 'POST' });
+                window.location.href = '/login.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+                window.location.href = '/login.html';
+            }
+        }
+
+        // Load search history on page load
+        loadSearchHistory();
+    </script>
+</body>
+</html>
